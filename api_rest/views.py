@@ -21,16 +21,12 @@ def get_users(request):
     
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
-
-def databaseEmDjango():
-
-    data = User.objects.get(pk='yvem_nick')
-
-    data = User.objects.filter(user_age='28')
-
-    data = User.objects.exclude()
-
-    data.save()
-
-    data.delete()
+@api_view(['GET'])
+def get_by_nick(request, nick):
+    try:
+        user = User.objects.get(pk=nick)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
